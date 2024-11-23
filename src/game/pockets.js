@@ -3,7 +3,7 @@ class pocket{
     constructor(x, y){
         this.x = x;
         this.y = y;
-        this.r = 40;
+        this.r = 40 * SCALE;
     }
 
     draw(context){

@@ -1,7 +1,7 @@
-const SCALE = 1;
+const SCALE = 0.2;
 const RADIUS = 19 * SCALE;
 const FRICTION = 0.99;
-const MIN_VELOCITY = 0.1 * SCALE;
+const MIN_VELOCITY = 0.15 * SCALE;
 
 const LEFT = 0;
 const TOP = 0;
@@ -68,7 +68,7 @@ function collide(b1, b2){
 }
 
 function rand(min,max){
-    return Math.floor(Math.random()*(max-min))+min;
+    return Math.random()*(max-min)+min;
 };
 
 class ball{
@@ -101,8 +101,8 @@ class ball{
         this.vx *= FRICTION
         this.vy *= FRICTION
 
-        if(Math.abs(this.vx) <=  0.2) this.vx = 0
-        if(Math.abs(this.vy) <=  0.2) this.vy = 0
+        if(Math.abs(this.vx) <= MIN_VELOCITY) this.vx = 0
+        if(Math.abs(this.vy) <= MIN_VELOCITY) this.vy = 0
 
         this.x += this.vx;
         this.y += this.vy;

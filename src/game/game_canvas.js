@@ -5,10 +5,10 @@ class game_canvas {
         this.context = this.canvas.getContext('2d');
         this.canvas.width = 700 * SCALE;
         this.canvas.height = 350 * SCALE;
-        this.canvas.style.margin = "10px";
+        this.canvas.style.margin = "3px";
         this.canvas.style.border = "1px solid black";
         this.canvas.style.backgroundColor = "green";
-        this.canvas.style.zoom = "0.2";
+        this.canvas.style.zoom = "1";
 
         // game屬性
         this.isEnd = false;
@@ -16,10 +16,10 @@ class game_canvas {
         this.number_of_pockets = 6;
         this.pockets = [ 
             new pocket(0, 0), 
-            new pocket(this.canvas.width / 2, 0 - 10), 
+            new pocket(this.canvas.width / 2, 0 - 10 * SCALE), 
             new pocket(this.canvas.width, 0),
             new pocket(0, this.canvas.height), 
-            new pocket(this.canvas.width / 2, this.canvas.height + 10), 
+            new pocket(this.canvas.width / 2, this.canvas.height + 10 * SCALE), 
             new pocket(this.canvas.width, this.canvas.height),
         ]
 
@@ -44,13 +44,13 @@ class game_canvas {
 
         this.balls = new Array(this.number_of_balls);
         for (let i = 0; i < this.number_of_balls - 1; ++i){
-            this.balls[i] = new ball(object_balls_properties[i].x, object_balls_properties[i].y);
+            this.balls[i] = new ball(object_balls_properties[i].x * SCALE, object_balls_properties[i].y * SCALE);
         }
 
 
-        this.balls[this.number_of_balls - 1] = new ball(rand(0, 700), rand(0, 350));
-        this.balls[this.number_of_balls - 1].vx = rand(-40, 40);
-        this.balls[this.number_of_balls - 1].vy = rand(-40, 40);
+        this.balls[this.number_of_balls - 1] = new ball(rand(0, 700) * SCALE, rand(0, 350) * SCALE);
+        this.balls[this.number_of_balls - 1].vx = rand(-40, 40) * SCALE;
+        this.balls[this.number_of_balls - 1].vy = rand(-40, 40) * SCALE;
         this.balls[this.number_of_balls - 1].color = 'white';
     }
 

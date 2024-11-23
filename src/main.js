@@ -1,4 +1,4 @@
-const number_of_games = 64;
+const number_of_games = 72;
 let object_balls_properties = [
     {x: 235, y: 100},
     {x: 540, y: 254},
@@ -12,11 +12,29 @@ for (let i = 0; i < number_of_games; ++i){
     games[i] = new game_canvas(game_box);
 }
 
+
 function init(){
     for (let i = 0; i < number_of_games; ++i){
         games[i].init(object_balls_properties);
     }
-    requestAnimationFrame(update);
+    //requestAnimationFrame(update);
+    
+    setInterval(() => {
+        let cnt = 0;
+        for (let i = 0; i < number_of_games; ++i){ if(games[i].isEnd) ++cnt; }
+        if(cnt == number_of_games) return;
+        update();
+    }, 0.000001);
+
+    /*while(1){
+        let cnt = 0;
+        for (let i = 0; i < number_of_games; ++i){ if(games[i].isEnd) ++cnt; }
+        if(cnt == number_of_games) break;
+        update();
+    }*/
+    //draw();
+
+    requestAnimationFrame(draw);
 }
 
 function update(){
@@ -29,9 +47,17 @@ function update(){
             if(games[i].score >= 0) console.log(games[i].score);
         }
         games[i].update();
-        games[i].draw();
+        //games[i].draw();
     }
-    requestAnimationFrame(update);
+    //requestAnimationFrame(update);
 }
 
+
+function draw(){
+    for (let i = 0; i < number_of_games; ++i){
+        //if(games[i].isEnd) continue;
+        games[i].draw();
+    }
+    requestAnimationFrame(draw);
+}
 init();
