@@ -72,11 +72,11 @@ function rand(min,max){
 };
 
 class ball{
-    constructor(){
-        this.x = rand(19 * SCALE, 681 * SCALE);
-        this.y = rand(19 * SCALE, 331 * SCALE);
-        this.vx = rand(-5, 6);
-        this.vy = rand(-5, 6);
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
         this.r = RADIUS;
         this.color = 'yellow';
         this.isLive = true;
@@ -101,8 +101,8 @@ class ball{
         this.vx *= FRICTION
         this.vy *= FRICTION
 
-        if(Math.abs(this.vx) <=  0.1) this.vx = 0
-        if(Math.abs(this.vy) <=  0.1) this.vy = 0
+        if(Math.abs(this.vx) <=  0.2) this.vx = 0
+        if(Math.abs(this.vy) <=  0.2) this.vy = 0
 
         this.x += this.vx;
         this.y += this.vy;
