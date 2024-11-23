@@ -12,6 +12,15 @@ class game_canvas {
 
         // game屬性
         this.number_of_balls = 8;
+        this.number_of_pockets = 6;
+        this.pockets = [ 
+            new pocket(0, 0), 
+            new pocket(this.canvas.width / 2, 0 - 10), 
+            new pocket(this.canvas.width, 0),
+            new pocket(0, this.canvas.height), 
+            new pocket(this.canvas.width / 2, this.canvas.height + 10), 
+            new pocket(this.canvas.width, this.canvas.height),
+        ]
 
         // 加入body
         parrent.appendChild(this.canvas);
@@ -20,6 +29,10 @@ class game_canvas {
     draw(){
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
+        this.pockets.forEach(pocket => {
+            pocket.draw(this.context);
+        });
+
         this.balls.forEach(ball => {
             ball.draw(this.context);
         });
@@ -34,8 +47,20 @@ class game_canvas {
 
     update(){
         for (let i = 0; i < this.number_of_balls; ++i){
+            if(this.balls[i].isLive == false) continue;
+
             this.balls[i].move();
+
+            for(let j=0; j<this.number_of_pockets; ++j){
+                if(this.pockets[j].inPocket(this.balls[i])){
+                    console.log(1)
+                    this.balls[i].isLive = false;
+                }
+            }
+
             for (let j = i + 1; j < this.number_of_balls; ++j){
+                if(this.balls[j].isLive == false) continue;
+
                 if (isCollide(this.balls[i], this.balls[j])){
                     collide(this.balls[i], this.balls[j]);
                 }

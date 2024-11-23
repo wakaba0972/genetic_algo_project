@@ -79,9 +79,12 @@ class ball{
         this.vy = rand(-5, 6);
         this.r = RADIUS;
         this.color = 'yellow';
+        this.isLive = true;
     }
 
     draw(ctx){
+        if(this.isLive == false) return;
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
         ctx.fillStyle = this.color;
