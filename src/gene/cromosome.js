@@ -1,4 +1,3 @@
-const SEGMENT = 4;
 const ANGLE_GENE_LEN = 13;
 const V_GENE_LEN = 6;
 const X_GENE_LEN = 10;
@@ -6,19 +5,31 @@ const Y_GENE_LEN = 9;
 
 function crossover(c1, c2){
     let res = new cromosome();
+    let n_gene = '';
     let len = c1.gene.length;
-    let seg_len = len / SEGMENT;
+    let seg_len = len / CROSSOVER_SEGMENT;
 
-    for(let i = 0; i < SEGMENT; ++i){
+    for(let i = 0; i < CROSSOVER_SEGMENT; ++i){
         let start = i * seg_len;
         let end = (i + 1) * seg_len;
-
         if(i % 2 == 0){
-            res.gene += c1.gene.slice(start, end);
+            n_gene += c1.gene.slice(start, end);
         } else {
-            res.gene += c2.gene.slice(start, end);
+            n_gene += c2.gene.slice(start, end);
         }
     }
+    // mutation
+    for(let i = 0; i < len; ++i){
+        if(Math.random() < MUTATION_RATE){
+            n_gene[i] = (n_gene[i] == '1'? '0': '1');
+        }
+    }
+
+    res.gene = n_gene;
+    res.angle_gene = n_gene.slice(0, ANGLE_GENE_LEN);
+    res.v_gene = n_gene.slice(ANGLE_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN);
+    res.x_gene = n_gene.slice(ANGLE_GENE_LEN + V_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN);
+    res.y_gene = n_gene.slice(ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN + Y_GENE_LEN);
 
     return res;
 }
@@ -29,7 +40,7 @@ class cromosome {
         this.v_gene = '0'.repeat(V_GENE_LEN);
         this.x_gene = '0'.repeat(X_GENE_LEN);
         this.y_gene = '0'.repeat(Y_GENE_LEN);
-        this.gene = '';
+        this.gene = this.angle_gene + this.v_gene + this.x_gene + this.y_gene;
     }
 
     bitwise_or(g1, g2){

@@ -35,16 +35,18 @@ class game_canvas {
         if(this.ready == false) return;
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // 繪製球袋
         for(let i=0; i<this.number_of_pockets; ++i){
             this.pockets[i].draw(this.context);
         }
 
+        // 繪製球
         for(let i=0; i<this.number_of_balls; ++i){
             this.balls[i].draw(this.context);
         }
 
         // 繪製球桿
-        let len = 500;
+        /*let len = 500;
         let angle = this.cur_ball_properties.angle - Math.PI;
         let x1 = (this.cur_ball_properties.x + 50 * Math.cos(angle)) * SCALE;
         let y1 = (this.cur_ball_properties.y + 50 * Math.sin(angle)) * SCALE;
@@ -57,7 +59,7 @@ class game_canvas {
         this.context.lineTo(x2, y2);
         this.context.strokeStyle = 'black';
         this.context.stroke();
-        this.context.closePath();
+        this.context.closePath();*/
     }
 
     // init

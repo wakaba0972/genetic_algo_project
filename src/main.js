@@ -1,6 +1,3 @@
-const number_of_games = 60;
-
-
 // 產生隨機cue ball
 function rand_cue_ball(){
     return {
@@ -16,6 +13,16 @@ let game_box = document.getElementById('game_box');
 let games = new Array(number_of_games);
 let idle_games = new Queue();
 
+function simulate(){
+    console.log("generation: " + a.id);
+    a.calculate().then((res) => {
+        console.log(a.total_fitness + ' / ' + population_size*18);
+        console.log(1 + ':' + a.tb[1] + ' ' + 2 + ':' + a.tb[2] + ' ' + 3 + ':' + a.tb[3] + '\n');
+        a = res;
+        return simulate();
+    });
+}
+
 function init(){
     // 宣告game_canvas
     for (let i = 0; i < number_of_games; ++i){
@@ -23,46 +30,12 @@ function init(){
         idle_games.enqueue(i);
     }
 
-    let a = new generation(10000);
-    a.calculate();
+    a = new generation(1, population_size);
+    a.rand_generation();
+    simulate();
 
-    // 讀取balls屬性
-    /*for (let i = 0; i < number_of_games; ++i){
-        games[i].init();
-        games[i].input_object(object_balls_properties);
-        games[i].input_cue(rand_cue_ball());
-    }*/
-    //requestAnimationFrame(update);
-    
-    /*setInterval(() => {
-        let cnt = 0;
-        for (let i = 0; i < number_of_games; ++i){ if(games[i].isEnd) ++cnt; }
-        if(cnt == number_of_games) return;
-        update();
-    }, 0.0001);*/
-
-    /*while(1){
-        let cnt = 0;
-        for (let i = 0; i < number_of_games; ++i){ if(games[i].isEnd) ++cnt; }
-        if(cnt == number_of_games) break;
-        update();
-    }*/
-    //draw();
-
-    requestAnimationFrame(draw);
+    //requestAnimationFrame(draw);
 }
-
-function update(){
-    for (let i = 0; i < number_of_games; ++i){
-        if(games[i].isEnd) continue;
-        if(!games[i].isEnd && games[i].check_isEnd()) idle_games.enqueue(i);
-
-        games[i].update();
-        //games[i].draw();
-    }
-    //requestAnimationFrame(update);
-}
-
 
 function draw(){
     for (let i = 0; i < number_of_games; ++i){
