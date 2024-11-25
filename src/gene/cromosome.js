@@ -1,7 +1,8 @@
-const ANGLE_GENE_LEN = 13;
-const V_GENE_LEN = 6;
+const ANGLE_GENE_LEN = 10;
+const V_GENE_LEN = 5;
 const X_GENE_LEN = 10;
 const Y_GENE_LEN = 9;
+const GENE_LEN = ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN + Y_GENE_LEN
 
 function crossover(c1, c2){
     let res = new cromosome();
@@ -18,34 +19,40 @@ function crossover(c1, c2){
             n_gene += c2.gene.slice(start, end);
         }
     }
-    // mutation
-    for(let i = 0; i < len; ++i){
-        if(Math.random() < MUTATION_RATE){
-            n_gene[i] = (n_gene[i] == '1'? '0': '1');
-        }
-    }
 
     res.gene = n_gene;
-    res.angle_gene = n_gene.slice(0, ANGLE_GENE_LEN);
-    res.v_gene = n_gene.slice(ANGLE_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN);
-    res.x_gene = n_gene.slice(ANGLE_GENE_LEN + V_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN);
-    res.y_gene = n_gene.slice(ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN + Y_GENE_LEN);
+    res.mutate();
 
     return res;
 }
 
 class cromosome {
     constructor() {
+        this.fitness = 0;
         this.angle_gene = '0'.repeat(ANGLE_GENE_LEN);
         this.v_gene = '0'.repeat(V_GENE_LEN);
         this.x_gene = '0'.repeat(X_GENE_LEN);
         this.y_gene = '0'.repeat(Y_GENE_LEN);
-        this.gene = this.angle_gene + this.v_gene + this.x_gene + this.y_gene;
+        this.gene = '0'.repeat(GENE_LEN);
+    }
+
+    mutate(rate = MUTATION_RATE){
+        let res = ''
+        for(let i = 0; i < GENE_LEN; ++i){
+            res += (Math.random() < rate? (this.gene[i] == '1'? '0': '1'): this.gene[i]);
+        }
+
+        this.gene = res;
+        this.angle_gene = this.gene.slice(0, ANGLE_GENE_LEN);
+        this.v_gene = this.gene.slice(ANGLE_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN);
+        this.x_gene = this.gene.slice(ANGLE_GENE_LEN + V_GENE_LEN, ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN);
+        this.y_gene = this.gene.slice(ANGLE_GENE_LEN + V_GENE_LEN + X_GENE_LEN, GENE_LEN);
+    
     }
 
     bitwise_or(g1, g2){
         let res = "";
-        for(let i = 0; i < g1.length; ++i){
+        for(let i = 0; i < GENE_LEN; ++i){
             res += ((g1[i] == '1' || g2[i] == '1')? '1': '0');
         }
 
@@ -58,10 +65,10 @@ class cromosome {
         let empty_x_gene = '0'.repeat(X_GENE_LEN);
         let empty_y_gene = '0'.repeat(Y_GENE_LEN);
 
-        let angle = Math.floor(rand(0, 2 * Math.PI) * 1000);
-        let v = Math.floor(rand(0, 40));
-        let x = Math.floor(rand(0, 700));
-        let y = Math.floor(rand(0, 350));
+        let angle = Math.floor(rand(0, 2 * Math.PI) * 100);
+        let v = Math.floor(rand(0, 32));
+        let x = Math.floor(rand(8, 692));
+        let y = Math.floor(rand(8, 342));
 
         angle = angle.toString(2);
         v = v.toString(2).split('').reverse().join('');
@@ -78,7 +85,7 @@ class cromosome {
 
     data(){
         return {
-            angle: parseInt(this.angle_gene.split('').reverse().join(''), 2) / 1000,
+            angle: parseInt(this.angle_gene.split('').reverse().join(''), 2) / 100,
             v: parseInt(this.v_gene.split('').reverse().join(''), 2),
             x: parseInt(this.x_gene.split('').reverse().join(''), 2),
             y: parseInt(this.y_gene.split('').reverse().join(''), 2)

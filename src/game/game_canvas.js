@@ -16,6 +16,8 @@ class game_canvas {
         this.isEnd = false;
         this.ready = false;
         this.score = 0;
+        this.bad = false;
+        this.inball = 0;
         this.number_of_pockets = 6;
         this.pockets = [ 
             new pocket(0, 0), 
@@ -46,7 +48,7 @@ class game_canvas {
         }
 
         // 繪製球桿
-        /*let len = 500;
+        let len = 500;
         let angle = this.cur_ball_properties.angle - Math.PI;
         let x1 = (this.cur_ball_properties.x + 50 * Math.cos(angle)) * SCALE;
         let y1 = (this.cur_ball_properties.y + 50 * Math.sin(angle)) * SCALE;
@@ -59,7 +61,7 @@ class game_canvas {
         this.context.lineTo(x2, y2);
         this.context.strokeStyle = 'black';
         this.context.stroke();
-        this.context.closePath();*/
+        this.context.closePath();
     }
 
     // init
@@ -69,6 +71,8 @@ class game_canvas {
         this.ready = false;
         this.id = id;
         this.score = 0;
+        this.bad = false;
+        this.inball = 0;
     }
 
     // 重新播放
@@ -129,6 +133,11 @@ class game_canvas {
         }
     }
 
+    fitness(){
+        if(this.bad || this.score == 0) return 1;
+        else return this.score;
+    }
+
     // 遊戲更新
     update(){
         for (let i = 0; i < this.number_of_balls; ++i){
@@ -140,10 +149,11 @@ class game_canvas {
                 if(this.pockets[j].inPocket(this.balls[i])){
                     this.balls[i].isLive = false;
                     if(this.balls[i].color == 'white'){
-                        this.score = -999;
+                        this.bad = true;
                     }
                     else {
-                        this.score += 1;
+                        this.inball += 1;
+                        this.score += 100;
                     }
                 }
             }
@@ -153,6 +163,9 @@ class game_canvas {
 
                 if (isCollide(this.balls[i], this.balls[j])){
                     collide(this.balls[i], this.balls[j]);
+
+                    if(this.balls[i].color == 'white') this.score += 10;
+                    else this.score += 3;
                 }
             }
         }

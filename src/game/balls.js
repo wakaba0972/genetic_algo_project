@@ -1,6 +1,6 @@
 const SCALE = 0.2;
 const RADIUS = 19 * SCALE;
-const FRICTION = 0.99;
+const FRICTION = 0.98;
 const MIN_VELOCITY = 0.15 * SCALE;
 
 const LEFT = 0;
